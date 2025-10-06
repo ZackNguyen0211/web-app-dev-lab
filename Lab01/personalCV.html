@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Resume – Nguyễn Hà Thanh</title>
+  <style>
+    :root {
+      --ink: #1a1a1a;
+      --muted: #444;
+      --accent-green: #2e7d32; /* headings like in screenshot */
+      --accent-blue: #1e88e5;  /* subhead links/titles */
+      --border: #222;
+    }
+
+    html, body {
+      height: 100%;
+      background: #f5f5f5;
+      color: var(--ink);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      line-height: 1.45;
+    }
+
+    .page {
+      box-sizing: border-box;
+      width: 816px;
+      min-height: 1056px;
+      margin: 24px auto;
+      background: #fff;
+      border: 2px solid var(--border);
+      padding: 48px 56px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    }
+
+    h1 {
+      font-size: 44px;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      letter-spacing: .3px;
+    }
+    .role {
+      color: var(--accent-green);
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    .rule {
+      height: 3px;
+      background: var(--border);
+      width: 220px;
+      margin: 10px 0 24px 0;
+    }
+
+    .contact p {
+      margin: 0;
+    }
+
+    h2.section {
+      color: var(--accent-green);
+      font-size: 18px;
+      margin: 26px 0 10px;
+      text-transform: none;
+      letter-spacing: .2px;
+    }
+
+    .item-title {
+      color: var(--accent-blue);
+      font-weight: 700;
+      margin: 0 0 2px 0;
+    }
+
+    .period {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+
+    ul {
+      margin: 0 0 8px 18px;
+    }
+
+    .skills-list, .desc {
+      margin: 0 0 8px 0;
+    }
+
+    .across a {
+      color: var(--accent-blue);
+      text-decoration: none;
+    }
+    .across a:hover { text-decoration: underline; }
+
+    @media print {
+      body { background: #fff; }
+      .page { box-shadow: none; margin: 0; width: auto; min-height: auto; border: 2px solid #000; padding: 36px 44px; }
+      a { color: #000; text-decoration: underline; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page" role="document">
+    <header>
+      <h1>Nguyễn Hà Thanh</h1>
+      <div class="role">Junior Frontend Developer</div>
+      <div class="rule" aria-hidden="true"></div>
+      <div class="contact">
+        <p>22 đường 2, khu dân cư Spring Town, phường Phước Long, TP.Thủ Đức</p>
+        <p>Thành phố Hồ Chí Minh</p>
+        <p>0909017655</p>
+        <p>zacknguyen0211@gmail.com</p>
+        <p>ITITIU21144@student.hcmiu.edu.vn</p>
+      </div>
+    </header>
+
+    <section aria-labelledby="skills" style="margin-top: 18px;">
+      <h2 id="skills" class="section">Skills</h2>
+      <p class="skills-list">HTML, CSS, JavaScript, Accessibility, Figma to Design, Responsive Web Design, Technical Writing, Presentation</p>
+    </section>
+
+    <section aria-labelledby="education">
+      <h2 id="education" class="section">Education</h2>
+      <p class="item-title">HCMC University of Technology, Ho Chi Minh City – Bachelor of Information Technology</p>
+      <div class="period">September 2018 to June 2022</div>
+      <p class="desc">Participated in various coding competitions and hackathons, gaining practical experience in software development.</p>
+    </section>
+
+    <section aria-labelledby="experience">
+      <h2 id="experience" class="section">Experience</h2>
+
+      <article>
+        <p class="item-title">Company Name, Location – Job Title</p>
+        <div class="period">Month 20xx to Month 20xx</div>
+        <ul>
+          <li>List of achievements</li>
+          <li>List of achievements</li>
+          <li>List of achievements</li>
+        </ul>
+        <p class="desc"><strong>Skills:</strong> List of skills used or gained at this company</p>
+      </article>
+
+      <article>
+        <p class="item-title">Company Name, Location – Job Title</p>
+        <div class="period">Month 20xx to Month 20xx</div>
+        <ul>
+          <li>List of achievements</li>
+          <li>List of achievements</li>
+          <li>List of achievements</li>
+        </ul>
+        <p class="desc"><strong>Skills:</strong> List of skills used or gained at this company</p>
+      </article>
+    </section>
+
+    <section aria-labelledby="across">
+      <h2 id="across" class="section">Across the Internet</h2>
+      <p class="across">Add your <a href="#">LinkedIn</a>, <a href="#">GitHub</a> profile links</p>
+    </section>
+  </main>
+</body>
+</html>
