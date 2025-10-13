@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Frames</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <header class="header"><img src="assets/banner.svg" alt="Banner"/></header>
+  
+    <nav class="nav container">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="blog.html">Blog</a>
+      <a href="contact.html">Contact (Form)</a>
+      <a href="frame.html">Frames</a>
+    </nav>
+    
+  <main class="container">
+    
+<section>
+  <h2>Frames (using &lt;iframe&gt;)</h2>
+  <p class="small">The sidebar links load pages into the iframe on the right. This satisfies the "Frame" requirement without using deprecated framesets.</p>
+  <div class="frame-layout">
+    <aside class="sidebar">
+      <strong>Pages</strong>
+      <a href="about.html" target="contentFrame">About</a>
+      <a href="gallery.html" target="contentFrame">Gallery</a>
+      <a href="blog.html" target="contentFrame">Blog</a>
+      <a href="contact.html" target="contentFrame">Contact</a>
+      <a href="https://www.example.com" target="contentFrame">External site</a>
+    </aside>
+    <iframe class="embedded" name="contentFrame" src="about.html" title="Frame content"></iframe>
+  </div>
+</section>
+
+  </main>
+  <footer><p>© <span data-year></span> Your Name. Built for homework.</p></footer>
+</body>
+</html>
