@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Contact</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <header class="header"><img src="assets/banner.svg" alt="Banner"/></header>
+  
+    <nav class="nav container">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="blog.html">Blog</a>
+      <a href="contact.html">Contact (Form)</a>
+      <a href="frame.html">Frames</a>
+    </nav>
+    
+  <main class="container">
+    
+<section>
+  <h2>Contact Me (Full Form Components)</h2>
+  <p class="notice">This form demonstrates many HTML form inputs: text, email, password, number, date, radio, checkbox, select, textarea, file, range, color, url, tel, hidden and buttons.</p>
+  <form class="form" action="#" method="post" onsubmit="alert('Form submitted (demo).'); return false;">
+    <input type="hidden" name="form_id" value="contact_v1" />
+    <div class="field"><label for="name">Full name</label><input id="name" name="name" type="text" placeholder="Nguyen Van A" required></div>
+    <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" placeholder="you@example.com" required></div>
+    <div class="field"><label for="password">Password</label><input id="password" name="password" type="password" placeholder="••••••••"></div>
+    <div class="field"><label for="tel">Phone</label><input id="tel" name="tel" type="tel" placeholder="+84 912 345 678"></div>
+    <div class="field"><label for="age">Age</label><input id="age" name="age" type="number" min="1" max="120"></div>
+    <div class="field"><label for="date">Date</label><input id="date" name="date" type="date"></div>
+    <div class="field"><label for="url">Website</label><input id="url" name="url" type="url" placeholder="https://..."></div>
+    <div class="field"><label for="color">Favorite color</label><input id="color" name="color" type="color" value="#22c55e"></div>
+    <div class="field"><label for="range">Satisfaction (0–10)</label><input id="range" name="range" type="range" min="0" max="10"></div>
+
+    <div class="field">
+      <label>Gender</label>
+      <div>
+        <label><input type="radio" name="gender" value="male"> Male</label>
+        <label><input type="radio" name="gender" value="female"> Female</label>
+        <label><input type="radio" name="gender" value="other" checked> Other</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Interests</label>
+      <div>
+        <label><input type="checkbox" name="int_photo"> Photography</label>
+        <label><input type="checkbox" name="int_code"> Coding</label>
+        <label><input type="checkbox" name="int_game"> Gaming</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="country">Country</label>
+      <select id="country" name="country">
+        <option value="">Choose…</option>
+        <option>Vietnam</option>
+        <option>Japan</option>
+        <option>USA</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <div class="field"><label for="file">Upload file</label><input id="file" name="file" type="file"></div>
+
+    <div class="field" style="grid-column:1/-1;">
+      <label for="message">Message</label>
+      <textarea id="message" name="message" placeholder="Write something…"></textarea>
+    </div>
+
+    <div class="field" style="grid-column:1/-1; display:flex; gap:10px;">
+      <button class="btn" type="submit">Submit</button>
+      <button class="btn secondary" type="reset">Reset</button>
+    </div>
+  </form>
+</section>
+
+  </main>
+  <footer><p>© <span data-year></span> Your Name. Built for homework.</p></footer>
+</body>
+</html>
