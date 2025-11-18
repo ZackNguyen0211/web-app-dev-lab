@@ -43,6 +43,9 @@ public class StudentController extends HttpServlet {
             case "delete":
                 deleteStudent(request, response);
                 break;
+            case "search":        // ✅ Add search case here
+                searchStudents(request, response);
+                break;
             default:
                 listStudents(request, response);
                 break;
@@ -72,6 +75,29 @@ public class StudentController extends HttpServlet {
         List<Student> students = studentDAO.getAllStudents();
         request.setAttribute("students", students);
         
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/views/student-list.jsp");
+        dispatcher.forward(request, response);
+    }
+    
+    // SEARCH students
+    private void searchStudents(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String keyword = request.getParameter("keyword");
+        List<Student> students;
+
+        if (keyword == null || keyword.trim().isEmpty()) {
+            students = studentDAO.getAllStudents();
+            keyword = "";
+        } else {
+            keyword = keyword.trim();
+            students = studentDAO.searchStudents(keyword);
+        }
+
+        // Set attributes
+        request.setAttribute("students", students);
+        request.setAttribute("keyword", keyword);
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("/views/student-list.jsp");
         dispatcher.forward(request, response);
     }

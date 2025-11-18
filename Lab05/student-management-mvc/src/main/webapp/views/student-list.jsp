@@ -97,6 +97,39 @@
         .btn-danger:hover {
             background-color: #c82333;
         }
+
+        /* 🔍 Search area */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 6px;
+            background-color: #f8f9fa;
+            border: 1px solid #e0e0e0;
+        }
+
+        .search-input {
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            min-width: 260px;
+            font-size: 14px;
+        }
+
+        .search-info {
+            margin-bottom: 10px;
+            color: #555;
+            font-style: italic;
+        }
         
         table {
             width: 100%;
@@ -165,13 +198,41 @@
                 ❌ ${param.error}
             </div>
         </c:if>
-        
-        <!-- Add New Student Button -->
-        <div style="margin-bottom: 20px;">
+
+        <!-- 🔍 Top bar: Add button + Search form -->
+        <div class="top-bar">
+            <!-- Add New Student Button -->
             <a href="student?action=new" class="btn btn-primary">
                 ➕ Add New Student
             </a>
+
+            <!-- Search Form (GET to student servlet) -->
+            <form class="search-form" action="student" method="get">
+                <input type="hidden" name="action" value="search">
+                <input
+                    type="text"
+                    name="keyword"
+                    class="search-input"
+                    placeholder="Search by code, name, or email..."
+                    value="${keyword}"
+                />
+                <button type="submit" class="btn btn-primary">🔍 Search</button>
+
+                <!-- Show All button ONLY when searching -->
+                <c:if test="${not empty keyword}">
+                    <a href="student?action=list" class="btn btn-secondary">
+                        Show All
+                    </a>
+                </c:if>
+            </form>
         </div>
+
+        <!-- Search info: only when there is a keyword -->
+        <c:if test="${not empty keyword}">
+            <div class="search-info">
+                Search results for: "<strong>${keyword}</strong>"
+            </div>
+        </c:if>
         
         <!-- Student Table -->
         <c:choose>

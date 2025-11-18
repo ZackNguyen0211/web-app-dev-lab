@@ -136,4 +136,48 @@ public class StudentDAO {
             return false;
         }
     }
+
+    // Search students by keyword
+    public List<Student> searchStudents(String keyword) {
+        List<Student> students = new ArrayList<>();
+
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return getAllStudents();
+        }
+
+        String sql = "SELECT * FROM students " +
+                    "WHERE student_code LIKE ? " +
+                    "OR full_name LIKE ? " +
+                    "OR email LIKE ? " +
+                    "ORDER BY id DESC";
+
+        String searchKeyword = "%" + keyword.trim() + "%";
+
+        try (Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, searchKeyword);
+            pstmt.setString(2, searchKeyword);
+            pstmt.setString(3, searchKeyword);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Student student = new Student();
+                    student.setId(rs.getInt("id"));
+                    student.setStudentCode(rs.getString("student_code"));
+                    student.setFullName(rs.getString("full_name"));
+                    student.setEmail(rs.getString("email"));
+                    student.setMajor(rs.getString("major"));
+                    student.setCreatedAt(rs.getTimestamp("created_at"));
+                    students.add(student);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return students;
+    }
+    
 }
