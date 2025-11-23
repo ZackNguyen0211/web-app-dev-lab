@@ -12,14 +12,14 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -28,38 +28,38 @@
             padding: 30px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.2);
         }
-        
+
         h1 {
             color: #333;
             margin-bottom: 10px;
             font-size: 32px;
         }
-        
+
         .subtitle {
             color: #666;
             margin-bottom: 30px;
             font-style: italic;
         }
-        
+
         .message {
             padding: 15px;
             margin-bottom: 20px;
             border-radius: 5px;
             font-weight: 500;
         }
-        
+
         .success {
             background-color: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
         }
-        
+
         .error {
             background-color: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
-        
+
         .btn {
             display: inline-block;
             padding: 12px 24px;
@@ -71,29 +71,29 @@
             cursor: pointer;
             font-size: 14px;
         }
-        
+
         .btn-primary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
-        
+
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
-        
+
         .btn-secondary {
             background-color: #6c757d;
             color: white;
         }
-        
+
         .btn-danger {
             background-color: #dc3545;
             color: white;
             padding: 8px 16px;
             font-size: 13px;
         }
-        
+
         .btn-danger:hover {
             background-color: #c82333;
         }
@@ -130,53 +130,94 @@
             color: #555;
             font-style: italic;
         }
-        
+
+        /* 🔽 Filter area */
+        .filter-box {
+            margin: 10px 0 15px 0;
+            padding: 10px 12px;
+            border-radius: 6px;
+            background-color: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-box label {
+            font-size: 14px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            min-width: 220px;
+            font-size: 14px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 10px;
         }
-        
+
         thead {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
-        
+
         th, td {
             padding: 15px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
-        
+
         th {
             font-weight: 600;
             text-transform: uppercase;
             font-size: 13px;
             letter-spacing: 0.5px;
         }
-        
+
         tbody tr {
             transition: background-color 0.2s;
         }
-        
+
         tbody tr:hover {
             background-color: #f8f9fa;
         }
-        
+
         .actions {
             display: flex;
             gap: 10px;
         }
-        
+
         .empty-state {
             text-align: center;
             padding: 60px 20px;
             color: #999;
         }
-        
+
         .empty-state-icon {
             font-size: 64px;
             margin-bottom: 20px;
+        }
+
+        /* Sort link styling */
+        .sort-link {
+            color: white;
+            text-decoration: none;
+        }
+
+        .sort-link:hover {
+            text-decoration: underline;
+        }
+
+        .sort-indicator {
+            margin-left: 4px;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -184,14 +225,14 @@
     <div class="container">
         <h1>📚 Student Management System</h1>
         <p class="subtitle">MVC Pattern with Jakarta EE & JSTL</p>
-        
+
         <!-- Success Message -->
         <c:if test="${not empty param.message}">
             <div class="message success">
                 ✅ ${param.message}
             </div>
         </c:if>
-        
+
         <!-- Error Message -->
         <c:if test="${not empty param.error}">
             <div class="message error">
@@ -227,24 +268,138 @@
             </form>
         </div>
 
-        <!-- Search info: only when there is a keyword -->
+        <!-- Search info -->
         <c:if test="${not empty keyword}">
             <div class="search-info">
                 Search results for: "<strong>${keyword}</strong>"
             </div>
         </c:if>
-        
+
+        <!-- 🔽 Major Filter Dropdown -->
+        <div class="filter-box">
+            <form action="student" method="get">
+                <input type="hidden" name="action" value="filter">
+                <label for="major">Filter by Major:</label>
+                <select id="major" name="major" class="filter-select">
+                    <option value="">All Majors</option>
+                    <option value="Computer Science"
+                        ${filterMajor == 'Computer Science' ? 'selected' : ''}>
+                        Computer Science
+                    </option>
+                    <option value="Information Technology"
+                        ${filterMajor == 'Information Technology' ? 'selected' : ''}>
+                        Information Technology
+                    </option>
+                    <option value="Software Engineering"
+                        ${filterMajor == 'Software Engineering' ? 'selected' : ''}>
+                        Software Engineering
+                    </option>
+                    <option value="Business Administration"
+                        ${filterMajor == 'Business Administration' ? 'selected' : ''}>
+                        Business Administration
+                    </option>
+                </select>
+
+                <button type="submit" class="btn btn-primary">Apply Filter</button>
+
+                <!-- Clear filter only when filtering -->
+                <c:if test="${not empty filterMajor}">
+                    <a href="student?action=list" class="btn btn-secondary">Clear Filter</a>
+                </c:if>
+            </form>
+        </div>
+
         <!-- Student Table -->
         <c:choose>
             <c:when test="${not empty students}">
+
+                <!-- Prepare next order values for each column -->
+                <c:set var="currentSort" value="${sortBy}" />
+                <c:set var="currentOrder" value="${order}" />
+
+                <c:set var="idOrder" value="asc" />
+                <c:if test="${currentSort == 'id' && currentOrder == 'asc'}">
+                    <c:set var="idOrder" value="desc" />
+                </c:if>
+
+                <c:set var="codeOrder" value="asc" />
+                <c:if test="${currentSort == 'student_code' && currentOrder == 'asc'}">
+                    <c:set var="codeOrder" value="desc" />
+                </c:if>
+
+                <c:set var="nameOrder" value="asc" />
+                <c:if test="${currentSort == 'full_name' && currentOrder == 'asc'}">
+                    <c:set var="nameOrder" value="desc" />
+                </c:if>
+
+                <c:set var="emailOrder" value="asc" />
+                <c:if test="${currentSort == 'email' && currentOrder == 'asc'}">
+                    <c:set var="emailOrder" value="desc" />
+                </c:if>
+
+                <c:set var="majorOrder" value="asc" />
+                <c:if test="${currentSort == 'major' && currentOrder == 'asc'}">
+                    <c:set var="majorOrder" value="desc" />
+                </c:if>
+
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Student Code</th>
-                            <th>Full Name</th>
-                            <th>Email</th>
-                            <th>Major</th>
+                            <th>
+                                <a class="sort-link"
+                                   href="student?action=sort&sortBy=id&order=${idOrder}">
+                                    ID
+                                    <c:if test="${currentSort == 'id'}">
+                                        <span class="sort-indicator">
+                                            ${currentOrder == 'asc' ? '▲' : '▼'}
+                                        </span>
+                                    </c:if>
+                                </a>
+                            </th>
+                            <th>
+                                <a class="sort-link"
+                                   href="student?action=sort&sortBy=student_code&order=${codeOrder}">
+                                    Student Code
+                                    <c:if test="${currentSort == 'student_code'}">
+                                        <span class="sort-indicator">
+                                            ${currentOrder == 'asc' ? '▲' : '▼'}
+                                        </span>
+                                    </c:if>
+                                </a>
+                            </th>
+                            <th>
+                                <a class="sort-link"
+                                   href="student?action=sort&sortBy=full_name&order=${nameOrder}">
+                                    Full Name
+                                    <c:if test="${currentSort == 'full_name'}">
+                                        <span class="sort-indicator">
+                                            ${currentOrder == 'asc' ? '▲' : '▼'}
+                                        </span>
+                                    </c:if>
+                                </a>
+                            </th>
+                            <th>
+                                <a class="sort-link"
+                                   href="student?action=sort&sortBy=email&order=${emailOrder}">
+                                    Email
+                                    <c:if test="${currentSort == 'email'}">
+                                        <span class="sort-indicator">
+                                            ${currentOrder == 'asc' ? '▲' : '▼'}
+                                        </span>
+                                    </c:if>
+                                </a>
+                            </th>
+                            <th>
+                                <a class="sort-link"
+                                   href="student?action=sort&sortBy=major&order=${majorOrder}">
+                                    Major
+                                    <c:if test="${currentSort == 'major'}">
+                                        <span class="sort-indicator">
+                                            ${currentOrder == 'asc' ? '▲' : '▼'}
+                                        </span>
+                                    </c:if>
+                                </a>
+                            </th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -261,7 +416,7 @@
                                         <a href="student?action=edit&id=${student.id}" class="btn btn-secondary">
                                             ✏️ Edit
                                         </a>
-                                        <a href="student?action=delete&id=${student.id}" 
+                                        <a href="student?action=delete&id=${student.id}"
                                            class="btn btn-danger"
                                            onclick="return confirm('Are you sure you want to delete this student?')">
                                             🗑️ Delete

@@ -121,6 +121,14 @@
             color: #666;
             margin-top: 5px;
         }
+
+        /* 🔴 Error message styling */
+        .error {
+            color: red;
+            font-size: 14px;
+            display: block;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -155,9 +163,14 @@
                        id="studentCode" 
                        name="studentCode" 
                        value="${student.studentCode}"
-                       ${student != null ? 'readonly' : 'required'}
+                       ${student != null ? 'readonly' : ''}
                        placeholder="e.g., SV001, IT123">
-                <p class="info-text">Format: 2 letters + 3+ digits</p>
+                <p class="info-text">Format: 2 uppercase letters + 3 or more digits</p>
+
+                <!-- Error for student code -->
+                <c:if test="${not empty errorCode}">
+                    <span class="error">${errorCode}</span>
+                </c:if>
             </div>
             
             <!-- Full Name -->
@@ -169,21 +182,29 @@
                        id="fullName" 
                        name="fullName" 
                        value="${student.fullName}"
-                       required
                        placeholder="Enter full name">
+
+                <!-- Error for name -->
+                <c:if test="${not empty errorName}">
+                    <span class="error">${errorName}</span>
+                </c:if>
             </div>
             
-            <!-- Email -->
+            <!-- Email (optional but validated if provided) -->
             <div class="form-group">
                 <label for="email">
-                    Email <span class="required">*</span>
+                    Email <span class="info-text">(optional, but must be valid if provided)</span>
                 </label>
                 <input type="email" 
                        id="email" 
                        name="email" 
                        value="${student.email}"
-                       required
                        placeholder="student@example.com">
+
+                <!-- Error for email -->
+                <c:if test="${not empty errorEmail}">
+                    <span class="error">${errorEmail}</span>
+                </c:if>
             </div>
             
             <!-- Major -->
@@ -191,7 +212,7 @@
                 <label for="major">
                     Major <span class="required">*</span>
                 </label>
-                <select id="major" name="major" required>
+                <select id="major" name="major">
                     <option value="">-- Select Major --</option>
                     <option value="Computer Science" 
                             ${student.major == 'Computer Science' ? 'selected' : ''}>
@@ -210,6 +231,11 @@
                         Business Administration
                     </option>
                 </select>
+
+                <!-- Error for major -->
+                <c:if test="${not empty errorMajor}">
+                    <span class="error">${errorMajor}</span>
+                </c:if>
             </div>
             
             <!-- Buttons -->
