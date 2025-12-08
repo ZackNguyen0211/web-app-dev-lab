@@ -1,0 +1,183 @@
+{
+	"info": {
+		"_postman_id": "013690ca-125a-45eb-9a82-7bcdecbba309",
+		"name": "Lab08",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "36990067"
+	},
+	"item": [
+		{
+			"name": "GET all customers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/api/customers"
+			},
+			"response": []
+		},
+		{
+			"name": "GET by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/api/customers/1"
+			},
+			"response": []
+		},
+		{
+			"name": "POST create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"customerCode\": \"C001\",\r\n  \"fullName\": \"John Doe\",\r\n  \"email\": \"john@example.com\",\r\n  \"phone\": \"+1-555-1234\",\r\n  \"address\": \"123 Street\",\r\n  \"status\": \"ACTIVE\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/customers"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT update",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"customerCode\": \"C001\",\r\n  \"fullName\": \"John Updated\",\r\n  \"email\": \"john.updated@example.com\",\r\n  \"phone\": \"+1-555-9999\",\r\n  \"address\": \"New Address\",\r\n  \"status\": \"ACTIVE\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/customers/1"
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "http://localhost:8080/api/customers/1"
+			},
+			"response": []
+		},
+		{
+			"name": "Validation error",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"customerCode\": \"C002\",\r\n  \"fullName\": \"Bad Email\",\r\n  \"email\": \"not-an-email\",\r\n  \"phone\": \"+1-555-0000\",\r\n  \"address\": \"Somewhere\",\r\n  \"status\": \"ACTIVE\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/customers"
+			},
+			"response": []
+		},
+		{
+			"name": "Not found error",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/api/customers/9999999"
+			},
+			"response": []
+		},
+		{
+			"name": "Duplicate error",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"customerCode\": \"C001\",\r\n  \"fullName\": \"Dup Code\",\r\n  \"email\": \"john@example.com\",\r\n  \"phone\": \"+1-555-2222\",\r\n  \"address\": \"Dup Addr\",\r\n  \"status\": \"ACTIVE\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/customers"
+			},
+			"response": []
+		},
+		{
+			"name": "Search results",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/customers/search?keyword=john",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"customers",
+						"search"
+					],
+					"query": [
+						{
+							"key": "keyword",
+							"value": "john"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Paginated results",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/customers?page=0&size=2&sortBy=fullName&sortDir=asc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"customers"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "2"
+						},
+						{
+							"key": "sortBy",
+							"value": "fullName"
+						},
+						{
+							"key": "sortDir",
+							"value": "asc"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
