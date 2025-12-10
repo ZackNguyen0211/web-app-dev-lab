@@ -29,6 +29,7 @@ import org.springframework.data.domain.Page;
 @RestController
 @RequestMapping("/api/customers")
 @CrossOrigin(origins = "*")
+@SuppressWarnings({"null"})
 public class CustomerRestController {
 
     private final CustomerService customerService;
@@ -52,7 +53,7 @@ public class CustomerRestController {
         response.put("totalItems", customerPage.getTotalElements());
         response.put("totalPages", customerPage.getTotalPages());
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/{id}")
