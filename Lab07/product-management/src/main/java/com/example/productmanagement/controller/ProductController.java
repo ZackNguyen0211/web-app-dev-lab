@@ -5,7 +5,6 @@ import com.example.productmanagement.service.ProductService;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +34,6 @@ public class ProductController {
     private final ProductService productService;
     private static final String DEFAULT_SORT = "id";
 
-    @Autowired
     public ProductController(ProductService productService) {
         this.productService = productService;
     }

@@ -4,11 +4,11 @@ import com.example.productmanagement.entity.Product;
 import com.example.productmanagement.repository.ProductRepository;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +18,6 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
-    @Autowired
     public ProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
@@ -30,22 +29,22 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> getAllProducts(Sort sort) {
-        return productRepository.findAll(sort);
+        return productRepository.findAll(sort != null ? sort : Sort.unsorted());
     }
 
     @Override
     public Optional<Product> getProductById(Long id) {
-        return productRepository.findById(id);
+        return productRepository.findById(Objects.requireNonNull(id, "Product ID cannot be null"));
     }
 
     @Override
     public Product saveProduct(Product product) {
-        return productRepository.save(product);
+        return productRepository.save(Objects.requireNonNull(product, "Product cannot be null"));
     }
 
     @Override
     public void deleteProduct(Long id) {
-        productRepository.deleteById(id);
+        productRepository.deleteById(Objects.requireNonNull(id, "Product ID cannot be null"));
     }
 
     @Override

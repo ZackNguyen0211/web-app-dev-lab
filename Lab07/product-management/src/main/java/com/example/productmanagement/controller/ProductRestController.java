@@ -4,7 +4,7 @@ import com.example.productmanagement.entity.Product;
 import com.example.productmanagement.service.ProductService;
 import java.net.URI;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Objects;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +21,6 @@ public class ProductRestController {
 
     private final ProductService productService;
 
-    @Autowired
     public ProductRestController(ProductService productService) {
         this.productService = productService;
     }
@@ -34,20 +33,21 @@ public class ProductRestController {
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable Long id) {
         return productService.getProductById(id)
-                .map(ResponseEntity::ok)
+                .<ResponseEntity<Product>>map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         Product saved = productService.saveProduct(product);
-        return ResponseEntity.created(URI.create("/api/products/" + saved.getId())).body(saved);
+        Long savedId = saved.getId();
+        return ResponseEntity.created(Objects.requireNonNull(URI.create("/api/products/" + (savedId != null ? savedId : "")), "URI cannot be null")).body(saved);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {
         return productService.getProductById(id)
-                .map(existing -> {
+                .<ResponseEntity<Product>>map(existing -> {
                     product.setId(id);
                     Product updated = productService.saveProduct(product);
                     return ResponseEntity.ok(updated);
