@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import java.io.IOException;
 
 @WebServlet("/login")
@@ -62,11 +61,23 @@ public class LoginController extends HttpServlet {
             session.setAttribute("user", user);
             session.setAttribute("role", user.getRole());
             session.setAttribute("fullName", user.getFullName());
-            session.setAttribute("currentUser", user); // keep compatibility with filters
+            session.setAttribute("currentUser", user);
             session.setMaxInactiveInterval(30 * 60);
 
             if ("on".equals(rememberMe)) {
-                // TODO: Implement remember me cookie if needed
+                // Generate secure random token
+                String token = java.util.UUID.randomUUID().toString();
+
+                // Save token to database (expires in 30 days)
+                userDAO.saveRememberToken(user.getId(), token);
+
+                // Create secure cookie
+                jakarta.servlet.http.Cookie remembercookie = new jakarta.servlet.http.Cookie("remember_token", token);
+                remembercookie.setMaxAge(30 * 24 * 60 * 60); // 30 days
+                remembercookie.setPath("/");
+                remembercookie.setHttpOnly(true);
+                remembercookie.setSecure(true);
+                response.addCookie(remembercookie);
             }
 
             if (user.isAdmin()) {

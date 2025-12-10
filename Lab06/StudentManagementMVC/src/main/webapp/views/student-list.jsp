@@ -1,11 +1,26 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
+<%
+    // Get theme from cookie, default to 'light'
+    String currentTheme = "light";
+    Cookie[] cookies = request.getCookies();
+    if (cookies != null) {
+        for (Cookie cookie : cookies) {
+            if ("user_theme".equals(cookie.getName())) {
+                currentTheme = cookie.getValue();
+                break;
+            }
+        }
+    }
+%>
 <!DOCTYPE html>
-<html>
+<html data-bs-theme="<%= currentTheme %>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student List - MVC</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
         * {
             margin: 0;
@@ -15,9 +30,16 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+        }
+        
+        [data-bs-theme="light"] body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        [data-bs-theme="dark"] body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
         }
 
         .container {
@@ -28,17 +50,30 @@
             padding: 30px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.2);
         }
+        
+        [data-bs-theme="dark"] .container {
+            background: #2d2d2d;
+            color: #e0e0e0;
+        }
 
         h1 {
             color: #333;
             margin-bottom: 10px;
             font-size: 32px;
         }
+        
+        [data-bs-theme="dark"] h1 {
+            color: #e0e0e0;
+        }
 
         .subtitle {
             color: #666;
             margin-bottom: 30px;
             font-style: italic;
+        }
+        
+        [data-bs-theme="dark"] .subtitle {
+            color: #b0b0b0;
         }
 
         .message {
@@ -53,11 +88,23 @@
             color: #155724;
             border: 1px solid #c3e6cb;
         }
+        
+        [data-bs-theme="dark"] .success {
+            background-color: #1f3d1f;
+            color: #6bff6b;
+            border: 1px solid #3f5f3f;
+        }
 
         .error {
             background-color: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
+        }
+        
+        [data-bs-theme="dark"] .error {
+            background-color: #3d1f1f;
+            color: #ff6b6b;
+            border: 1px solid #5d3f3f;
         }
 
         .btn {
@@ -85,6 +132,10 @@
         .btn-secondary {
             background-color: #6c757d;
             color: white;
+        }
+        
+        [data-bs-theme="dark"] .btn-secondary {
+            background-color: #505050;
         }
 
         .btn-danger {
@@ -116,6 +167,11 @@
             background-color: #f8f9fa;
             border: 1px solid #e0e0e0;
         }
+        
+        [data-bs-theme="dark"] .search-form {
+            background-color: #3d3d3d;
+            border-color: #505050;
+        }
 
         .search-input {
             padding: 8px 12px;
@@ -123,12 +179,24 @@
             border: 1px solid #ccc;
             min-width: 260px;
             font-size: 14px;
+            background: white;
+            color: #333;
+        }
+        
+        [data-bs-theme="dark"] .search-input {
+            background: #505050;
+            color: #e0e0e0;
+            border-color: #606060;
         }
 
         .search-info {
             margin-bottom: 10px;
             color: #555;
             font-style: italic;
+        }
+        
+        [data-bs-theme="dark"] .search-info {
+            color: #b0b0b0;
         }
 
         /* 🔽 Filter area */
@@ -142,11 +210,20 @@
             align-items: center;
             gap: 10px;
         }
+        
+        [data-bs-theme="dark"] .filter-box {
+            background-color: #3d3d3d;
+            border-color: #505050;
+        }
 
         .filter-box label {
             font-size: 14px;
             color: #555;
             font-weight: 500;
+        }
+        
+        [data-bs-theme="dark"] .filter-box label {
+            color: #b0b0b0;
         }
 
         .filter-select {
@@ -155,6 +232,14 @@
             border: 1px solid #ccc;
             min-width: 220px;
             font-size: 14px;
+            background: white;
+            color: #333;
+        }
+        
+        [data-bs-theme="dark"] .filter-select {
+            background: #505050;
+            color: #e0e0e0;
+            border-color: #606060;
         }
 
         table {
@@ -173,6 +258,11 @@
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
+        
+        [data-bs-theme="dark"] th,
+        [data-bs-theme="dark"] td {
+            border-bottom-color: #505050;
+        }
 
         th {
             font-weight: 600;
@@ -188,6 +278,10 @@
         tbody tr:hover {
             background-color: #f8f9fa;
         }
+        
+        [data-bs-theme="dark"] tbody tr:hover {
+            background-color: #3d3d3d;
+        }
 
         .actions {
             display: flex;
@@ -198,6 +292,10 @@
             text-align: center;
             padding: 60px 20px;
             color: #999;
+        }
+        
+        [data-bs-theme="dark"] .empty-state {
+            color: #808080;
         }
 
         .empty-state-icon {
@@ -221,7 +319,7 @@
         }
 
         .navbar {
-            background: #2c3e50;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
             color: white;
             padding: 15px 30px;
             display: flex;
@@ -229,6 +327,12 @@
             align-items: center;
             border-radius: 10px;
             margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        
+        [data-bs-theme="dark"] .navbar {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border-bottom: 1px solid #404040;
         }
 
         .navbar-right {
@@ -249,6 +353,7 @@
             font-size: 12px;
             font-weight: 600;
             background: #3498db;
+            color: white;
         }
 
         .btn-nav, .btn-logout {
@@ -257,6 +362,8 @@
             text-decoration: none;
             color: white;
             font-weight: 600;
+            border: none;
+            cursor: pointer;
         }
 
         .btn-nav { background: #3498db; }
@@ -292,7 +399,21 @@
             </div>
         </div>
 
-                <!-- Top bar: Add button + Search form -->
+        <!-- Error Message from AdminFilter -->
+        <c:if test="${not empty param.error}">
+            <div class="message error">
+                ❌ ${param.error}
+            </div>
+        </c:if>
+
+        <!-- Success Message -->
+        <c:if test="${not empty param.message}">
+            <div class="message success">
+                ✅ ${param.message}
+            </div>
+        </c:if>
+
+        <!-- Top bar: Add button + Search form -->
         <div class="top-bar">
             <!-- Add New Student Button (admin only) -->
             <c:if test="${sessionScope.role eq 'admin'}">
@@ -493,6 +614,8 @@
             </c:otherwise>
         </c:choose>
     </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 

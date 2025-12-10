@@ -4,7 +4,11 @@ com\student\filter\AuthFilter.class
 com\student\controller\LogoutController.class
 com\student\controller\LoginController.class
 com\student\controller\DashboardController.class
+com\student\util\CookieUtil.class
 com\student\model\Student.class
+com\student\controller\ThemeController.class
 com\student\dao\UserDAO.class
 com\student\model\User.class
+com\student\util\PasswordHashGenerator.class
+com\student\controller\ChangePasswordController.class
 com\student\controller\StudentController.class

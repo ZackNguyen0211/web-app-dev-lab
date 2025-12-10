@@ -7,6 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebFilter;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -50,6 +51,48 @@ public class AuthFilter implements Filter {
 
         HttpSession session = httpRequest.getSession(false);
         boolean isLoggedIn = (session != null && session.getAttribute("user") != null);
+
+        if (!isLoggedIn) {
+            // Check for remember token cookie
+            String token = null;
+            Cookie[] cookies = httpRequest.getCookies();
+
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if ("remember_token".equals(cookie.getName())) {
+                        token = cookie.getValue();
+                        break;
+                    }
+                }
+            }
+
+            // If remember token exists, try auto-login
+            if (token != null) {
+                com.student.dao.UserDAO userDAO = new com.student.dao.UserDAO();
+                com.student.model.User user = userDAO.getUserByToken(token);
+
+                if (user != null) {
+                    // Token is valid - auto-login user
+                    session = httpRequest.getSession(true);
+                    session.setAttribute("user", user);
+                    session.setAttribute("userId", user.getId());
+                    session.setAttribute("username", user.getUsername());
+                    session.setAttribute("role", user.getRole());
+                    session.setAttribute("fullName", user.getFullName());
+                    session.setMaxInactiveInterval(30 * 60);
+
+                    // Continue to requested page
+                    chain.doFilter(request, response);
+                    return;
+                } else {
+                    // Token invalid/expired - delete cookie
+                    Cookie deleteCookie = new Cookie("remember_token", "");
+                    deleteCookie.setMaxAge(0);
+                    deleteCookie.setPath("/");
+                    httpResponse.addCookie(deleteCookie);
+                }
+            }
+        }
 
         if (isLoggedIn) {
             chain.doFilter(request, response);
