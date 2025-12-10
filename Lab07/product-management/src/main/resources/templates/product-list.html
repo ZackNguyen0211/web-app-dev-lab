@@ -16,6 +16,10 @@
         .alert-error { background-color: #f8d7da; color: #721c24; }
         .actions a { margin-right: 6px; }
         .header-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+        .filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; align-items: end; width: 100%; }
+        .filters input, .filters select { width: 100%; padding: 6px; box-sizing: border-box; }
+        .pagination a { margin-right: 6px; text-decoration: none; }
+        .active-page { font-weight: bold; text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -27,9 +31,34 @@
 
     <div class="header-actions">
         <a class="btn btn-primary" th:href="@{/products/new}">New Product</a>
-        <form th:action="@{/products/search}" method="get">
-            <input type="text" name="keyword" placeholder="Search by name" th:value="${keyword}">
-            <button type="submit" class="btn btn-primary">Search</button>
+        <form th:action="@{/products/advanced-search}" method="get" style="width:100%;">
+            <div class="filters">
+                <div>
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Search by name" th:value="${name}">
+                </div>
+                <div>
+                    <label for="category">Category</label>
+                    <select id="category" name="category">
+                        <option value="">All Categories</option>
+                        <option th:each="cat : ${categories}"
+                                th:value="${cat}"
+                                th:text="${cat}"
+                                th:selected="${cat == selectedCategory}"></option>
+                    </select>
+                </div>
+                <div>
+                    <label for="minPrice">Min Price</label>
+                    <input type="number" step="0.01" id="minPrice" name="minPrice" th:value="${minPrice}">
+                </div>
+                <div>
+                    <label for="maxPrice">Max Price</label>
+                    <input type="number" step="0.01" id="maxPrice" name="maxPrice" th:value="${maxPrice}">
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary">Advanced Search</button>
+                </div>
+            </div>
         </form>
     </div>
 
@@ -38,10 +67,31 @@
             <tr>
                 <th>ID</th>
                 <th>Code</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Category</th>
+                <th>
+                    <a th:href="@{/products(sortBy='name', sortDir=${sortDir=='asc'?'desc':'asc'}, category=${selectedCategory})}">
+                        Name
+                        <span th:if="${sortBy=='name'}" th:text="${sortDir=='asc'?'↑':'↓'}"></span>
+                    </a>
+                </th>
+                <th>Image</th>
+                <th>
+                    <a th:href="@{/products(sortBy='price', sortDir=${sortDir=='asc'?'desc':'asc'}, category=${selectedCategory})}">
+                        Price
+                        <span th:if="${sortBy=='price'}" th:text="${sortDir=='asc'?'↑':'↓'}"></span>
+                    </a>
+                </th>
+                <th>
+                    <a th:href="@{/products(sortBy='quantity', sortDir=${sortDir=='asc'?'desc':'asc'}, category=${selectedCategory})}">
+                        Quantity
+                        <span th:if="${sortBy=='quantity'}" th:text="${sortDir=='asc'?'↑':'↓'}"></span>
+                    </a>
+                </th>
+                <th>
+                    <a th:href="@{/products(sortBy='category', sortDir=${sortDir=='asc'?'desc':'asc'}, category=${selectedCategory})}">
+                        Category
+                        <span th:if="${sortBy=='category'}" th:text="${sortDir=='asc'?'↑':'↓'}"></span>
+                    </a>
+                </th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -49,19 +99,30 @@
             <tr th:if="${products == null or #lists.isEmpty(products)}">
                 <td colspan="7">No products found.</td>
             </tr>
-            <tr th:each="product : ${products}">
-                <td th:text="${product.id}"></td>
-                <td th:text="${product.productCode}"></td>
-                <td th:text="${product.name}"></td>
-                <td th:text="${#numbers.formatDecimal(product.price,1,2)}"></td>
-                <td th:text="${product.quantity}"></td>
-                <td th:text="${product.category}"></td>
-                <td class="actions">
+                <tr th:each="product : ${products}">
+                    <td th:text="${product.id}"></td>
+                    <td th:text="${product.productCode}"></td>
+                    <td th:text="${product.name}"></td>
+                    <td>
+                        <img th:if="${product.imagePath}" th:src="${product.imagePath}" alt="product image" style="max-width:80px;">
+                    </td>
+                    <td th:text="${#numbers.formatDecimal(product.price,1,2)}"></td>
+                    <td th:text="${product.quantity}"></td>
+                    <td th:text="${product.category}"></td>
+                    <td class="actions">
                     <a class="btn btn-primary" th:href="@{'/products/edit/' + ${product.id}}">Edit</a>
                     <a class="btn btn-danger" th:href="@{'/products/delete/' + ${product.id}}" onclick="return confirm('Delete this product?');">Delete</a>
                 </td>
             </tr>
         </tbody>
     </table>
+
+    <div class="pagination" th:if="${totalPages != null and totalPages > 1}">
+        <span>Pages:</span>
+        <a th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+           th:href="@{/products/search(keyword=${keyword}, page=${i}, size=${size} ?: 10)}"
+           th:text="${i + 1}"
+           th:classappend="${i == currentPage} ? 'active-page' : ''"></a>
+    </div>
 </body>
 </html>
